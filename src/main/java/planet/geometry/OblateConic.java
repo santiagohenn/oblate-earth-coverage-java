@@ -31,43 +31,51 @@ public class OblateConic {
         this.drawingMethod = 0;
     }
 
+    public void setDrawingMethod(int drawingMethod) {
+        this.drawingMethod = drawingMethod;
+    }
 
+    /**
+     * This method ...
+     *
+     * @param epsilon elevation threshold (degrees)
+     * @param tolerance tolerance when obtaining the half-angle from a given elevation threshold (degrees)
+     * @param segments the amount of segments for a half-cone of visibility
+     **/
+    public void setElevationParams(double epsilon, double tolerance, int segments) {
+        this.epsilon = epsilon;
+        this.tolerance = tolerance;
+        this.segments = segments;
+    }
 
-    public List<double[]> drawLLAConic(double x, double y, double z, double eta, int segments) throws Exception {
-        List<double[]> coordinates = drawConic(x, y, z, eta, 0, 0, segments, 0);
+    /**
+     * This method ...
+     *
+     * @param halfApertureOfSensor the satellite's cone half-angle of visibility (degrees)
+     * @param segments the amount of segments for a half-cone of visibility
+     **/
+    public void setSensorParams(double halfApertureOfSensor, int segments) {
+        this.halfApertureOfSensor = halfApertureOfSensor;
+        this.segments = segments;
+    }
+
+    public List<double[]> drawLLAConic(double x, double y, double z) throws Exception {
+        List<double[]> coordinates = drawConic(x, y, z);
         return conv.ecef2lla(coordinates);
-    }
-
-    public List<double[]> drawLLAConic(double x, double y, double z, double epsilon, double tol, int segments) throws Exception {
-        List<double[]> coordinates = drawConic(x, y, z, 0, epsilon, tol, segments, 1);
-        return conv.ecef2lla(coordinates);
-    }
-
-    public List<double[]> drawConic(double x, double y, double z, double eta, int segments) throws Exception {
-        return drawConic(x, y, z, eta, 0, 0, segments, 0);
-    }
-
-    public List<double[]> drawConic(double x, double y, double z, double epsilon, double tol, int segments) throws Exception {
-        return drawConic(x, y, z, 0, epsilon, tol, segments, 1);
     }
 
     /**
      * This method returns a list of coordinates depicting the access area of a satellite located at the Earth Centered
      * Earth Fixed coordinates (x,y,z). The two possible methods are: (0) the cone of access is computed using a conic
-     * on the satellite with eta = half-angle of visibility or (1) the cone of access is computed using the elevation
+     * sensor on the satellite with the half-angle of visibility or (1) the cone of access is computed using the elevation
      * threshold epsilon.
      *
      * @param x the x component of the satellite's position (Km)
      * @param y the y component of the satellite's position (Km)
      * @param z the z component of the satellite's position (Km)
-     * @param eta the satellite's cone half-angle of visibility (degrees)
-     * @param epsilon elevation threshold (degrees)
-     * @param tol tolerance when obtaining the half-angle from a given elevation threshold (degrees)
-     * @param segments the amount of segments for a half-cone of visibility
      * @return a List of double[] containing the polygons coordinates in degrees
      **/
-    public List<double[]> drawConic(double x, double y, double z, double eta, double epsilon, double tol,
-                                           int segments, int type) throws Exception {
+    public List<double[]> drawConic(double x, double y, double z) throws Exception {
 
         Vector3D pos = new Vector3D(x, y, z);
 
@@ -174,10 +182,11 @@ public class OblateConic {
 
             // Coefficients derived from the normalisation of the second-degree
             // equation to reduce te numerical error
-            double coeff_1 = (2 * e_sc * u_sc) / (Math.pow(a_tilde, 2) - Math.pow(e_sc, 2));
-            double coeff_2 = (Math.pow(b_tilde, 2) - Math.pow(u_sc, 2)) / (Math.pow(a_tilde, 2) - Math.pow(e_sc, 2));
+            double v = pow(a_tilde, 2) - pow(e_sc, 2);
+            double coeff_1 = (2 * e_sc * u_sc) / v;
+            double coeff_2 = (Math.pow(b_tilde, 2) - Math.pow(u_sc, 2)) / v;
 
-            // Discrimant of the second degree-equation
+            // Discriminant of the second degree-equation
             double Delta_hor = Math.pow(coeff_1, 2) - 4 * coeff_2;
 
             // Slopes of the tangents: condition to assign the proper P1 and P2
@@ -240,14 +249,14 @@ public class OblateConic {
 
             // Computation of the effective horizon
             List<double[]> vectors = new ArrayList<>();
-            // Compute the points in the local frame according to the method
 
-            if (type == 0) {    // Using eta
-                vectors = HalfApertureVectors.computeHalfAperture(a_tilde, b_tilde, alpha_SC, eta, eta_hor_1, eta_hor_2, r_line_local);
-            } else if (type == 1) {     // Using th
-//                vectors = computeWithElevationGD(a_tilde, b_tilde, alpha_SC, eta_hor_1, eta_hor_2, epsilon, tol, r_line_local);
-                vectors = HalfApertureVectors.computeWithElevationBisect(a_tilde, b_tilde, alpha_SC, eta_hor_1, eta_hor_2, epsilon, tol, r_line_local);
-
+            // Compute the points in the local frame according to the chosen method
+            if (drawingMethod == 0) {    // Using eta
+                vectors = HalfApertureVectors.computeHalfAperture(a_tilde, b_tilde, alpha_SC, halfApertureOfSensor, eta_hor_1, eta_hor_2, r_line_local);
+            } else if (drawingMethod == 1) {     // Using th
+                vectors = HalfApertureVectors.computeWithElevationBisect(a_tilde, b_tilde, alpha_SC, eta_hor_1, eta_hor_2, epsilon, tolerance, r_line_local);
+            } else if (drawingMethod == 2) {
+                vectors = HalfApertureVectors.computeWithElevationGD(a_tilde, b_tilde, alpha_SC, eta_hor_1, eta_hor_2, epsilon, tolerance, r_line_local);
             }
 
             // Inverse transformation from local to Geocentric inertial frame
