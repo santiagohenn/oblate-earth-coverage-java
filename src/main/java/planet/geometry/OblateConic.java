@@ -14,7 +14,7 @@ public class OblateConic {
     public Ellipsoid e = new Ellipsoid(6378.137,1 / 298.257223563,3.986004418E14,7.2921150E-5);
     public Converter conv = new Converter(e);
 
-    private int drawingMethod;
+    private int drawingMethod;  // 0 = eta, 1 = bisect, 2 = gradient
     private double tolerance;
     private double halfApertureOfSensor;
     private double epsilon;
