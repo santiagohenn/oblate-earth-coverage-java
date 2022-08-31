@@ -9,6 +9,16 @@ public class AuxiliaryVectors {
         return new Vector3D(A_321[2][0], A_321[2][1], A_321[2][2]);
     }
 
+    public static Vector3D getNadir(double x, double y, double z, Ellipsoid e) {
+
+        Vector3D pos = new Vector3D(x, y, z);   // n
+        Vector3D gcPos = pos.scalarMultiply(-1.0D / pos.getNorm());
+
+        // Line-of-sight projection onto the Earth surface (nadir)
+        return AuxiliaryVectors.getNadir(pos, gcPos, e);
+
+    }
+
     public static Vector3D getNadir(Vector3D pos, Vector3D gcPos, Ellipsoid e) {
 
         // Coordinates of the S/C in the Geocentric Inertial Frame

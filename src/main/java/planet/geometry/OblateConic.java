@@ -15,15 +15,23 @@ public class OblateConic {
     public Ellipsoid e = new Ellipsoid(6378.137,1 / 298.257223563,3.986004418E14,7.2921150E-5);
     public Converter conv = new Converter(e);
 
-    public double a = e.getA();
-    public double a2 = e.getA2();
-    public double b = e.getB();
-    public double b2 = e.getB2();
-    public double E2 = e.getE2();
+    private double a = e.getA();
+    private double a2 = e.getA2();
+    private double b = e.getB();
+    private double b2 = e.getB2();
+    private double E2 = e.getE2();
+    private int drawingMethod;
+    private double tolerance;
+    private double halfApertureOfSensor;
+    private double epsilon;
+    private int segments;
 
     public OblateConic(Ellipsoid e) {
         this.e = e;
+        this.drawingMethod = 0;
     }
+
+
 
     public List<double[]> drawLLAConic(double x, double y, double z, double eta, int segments) throws Exception {
         List<double[]> coordinates = drawConic(x, y, z, eta, 0, 0, segments, 0);
@@ -65,9 +73,6 @@ public class OblateConic {
 
         // n
         Vector3D gcPos = pos.scalarMultiply(-1.0D / pos.getNorm());
-
-        // Line-of-sight projection onto the Earth surface (nadir)
-        Vector3D nadir = AuxiliaryVectors.getNadir(pos, gcPos, e);
 
         // Definition of a new reference frame
         // The new reference frame is shifted w.r.t. the Geocentric frame:
