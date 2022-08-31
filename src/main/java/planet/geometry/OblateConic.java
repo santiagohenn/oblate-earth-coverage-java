@@ -6,7 +6,6 @@ import planet.ellipsoids.Ellipsoid;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import static java.lang.Math.*;
 
@@ -15,11 +14,6 @@ public class OblateConic {
     public Ellipsoid e = new Ellipsoid(6378.137,1 / 298.257223563,3.986004418E14,7.2921150E-5);
     public Converter conv = new Converter(e);
 
-    private double a = e.getA();
-    private double a2 = e.getA2();
-    private double b = e.getB();
-    private double b2 = e.getB2();
-    private double E2 = e.getE2();
     private int drawingMethod;
     private double tolerance;
     private double halfApertureOfSensor;
@@ -126,15 +120,15 @@ public class OblateConic {
 
             // Ellipse's centre in the Geocentric inertial frame
             // (Transposed)
-            Vector3D s = new Vector3D((n1_prime * d) / (1 - E2 * Math.pow(n3_prime, 2)),
-                    (n2_prime * d) / (1 - E2 * Math.pow(n3_prime, 2)),
-                    ((b2 / a2) * n3_prime * d) / (1 - E2 * Math.pow(n3_prime, 2)));
+            Vector3D s = new Vector3D((n1_prime * d) / (1 - e.getE2() * Math.pow(n3_prime, 2)),
+                    (n2_prime * d) / (1 - e.getE2() * Math.pow(n3_prime, 2)),
+                    ((e.getB2() / e.getA2()) * n3_prime * d) / (1 - e.getE2() * Math.pow(n3_prime, 2)));
 
             // Ellipse's semi-major axis
-            double a_tilde = a * sqrt(1 - Math.pow(d, 2.0) / (a2 * (1 - E2 * Math.pow(n3_prime, 2))));
+            double a_tilde = e.getA() * sqrt(1 - Math.pow(d, 2.0) / (e.getA2() * (1 - e.getE2() * Math.pow(n3_prime, 2))));
 
             // Ellipse's semi-minor axis
-            double b_tilde = b * (sqrt(1 - (Math.pow(d, 2.0) / a2) - E2 * Math.pow(n3_prime, 2))) / (1 - E2 * Math.pow(n3_prime, 2.0));
+            double b_tilde = e.getB() * (sqrt(1 - (Math.pow(d, 2.0) / e.getA2()) - e.getE2() * Math.pow(n3_prime, 2))) / (1 - e.getE2() * Math.pow(n3_prime, 2.0));
 
             Vector3D e;
             Vector3D u;
