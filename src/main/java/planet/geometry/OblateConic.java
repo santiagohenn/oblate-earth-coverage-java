@@ -12,35 +12,34 @@ import static java.lang.Math.*;
 
 public class OblateConic {
 
-    public static final double WGS84_F = 1 / 298.257223563;
-    public static final double WGS84_E = 0.081819190842613;
-    public static final double a_avg = 6371.009D;
-    public static final double a = 6378.137D;
-    public static final double a2 = Math.pow(a, 2);
-    public static final double a4 = Math.pow(a, 4);
-    public static final double b = a * (1 - WGS84_F);
-    public static final double b2 = Math.pow(b, 2);
-    public static final double b4 = Math.pow(b, 4);
-    public static final double E2 = Math.pow(WGS84_E, 2);
+    public Ellipsoid e = new Ellipsoid(6378.137,1 / 298.257223563,3.986004418E14,7.2921150E-5);
+    public Converter conv = new Converter(e);
 
-    public static final Ellipsoid e = new Ellipsoid(6378.137,1 / 298.257223563,3.986004418E14,7.2921150E-5);
-    public static final Converter conv = new Converter(e);
+    public double a = e.getA();
+    public double a2 = e.getA2();
+    public double b = e.getB();
+    public double b2 = e.getB2();
+    public double E2 = e.getE2();
 
-    public static List<double[]> drawLLAConic(double x, double y, double z, double eta, int segments) throws Exception {
+    public OblateConic(Ellipsoid e) {
+        this.e = e;
+    }
+
+    public List<double[]> drawLLAConic(double x, double y, double z, double eta, int segments) throws Exception {
         List<double[]> coordinates = drawConic(x, y, z, eta, 0, 0, segments, 0);
         return conv.ecef2lla(coordinates);
     }
 
-    public static List<double[]> drawLLAConic(double x, double y, double z, double epsilon, double tol, int segments) throws Exception {
+    public List<double[]> drawLLAConic(double x, double y, double z, double epsilon, double tol, int segments) throws Exception {
         List<double[]> coordinates = drawConic(x, y, z, 0, epsilon, tol, segments, 1);
         return conv.ecef2lla(coordinates);
     }
 
-    public static List<double[]> drawConic(double x, double y, double z, double eta, int segments) throws Exception {
+    public List<double[]> drawConic(double x, double y, double z, double eta, int segments) throws Exception {
         return drawConic(x, y, z, eta, 0, 0, segments, 0);
     }
 
-    public static List<double[]> drawConic(double x, double y, double z, double epsilon, double tol, int segments) throws Exception {
+    public List<double[]> drawConic(double x, double y, double z, double epsilon, double tol, int segments) throws Exception {
         return drawConic(x, y, z, 0, epsilon, tol, segments, 1);
     }
 
@@ -59,7 +58,7 @@ public class OblateConic {
      * @param segments the amount of segments for a half-cone of visibility
      * @return a List of double[] containing the polygons coordinates in degrees
      **/
-    public static List<double[]> drawConic(double x, double y, double z, double eta, double epsilon, double tol,
+    public List<double[]> drawConic(double x, double y, double z, double eta, double epsilon, double tol,
                                            int segments, int type) throws Exception {
 
         Vector3D pos = new Vector3D(x, y, z);
