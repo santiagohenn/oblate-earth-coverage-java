@@ -11,7 +11,7 @@ import static java.lang.Math.*;
 
 public class OblateConic {
 
-    public Ellipsoid e = new Ellipsoid(6378.137,1 / 298.257223563,3.986004418E14,7.2921150E-5);
+    public Ellipsoid e = new Ellipsoid(6378.137, 1 / 298.257223563, 3.986004418E14, 7.2921150E-5);
     public Converter conv = new Converter(e);
 
     private int drawingMethod;  // 0 = eta, 1 = bisect, 2 = gradient
@@ -20,21 +20,33 @@ public class OblateConic {
     private double epsilon;
     private int segments;
 
+    /**
+     * Constructor for the OblateConic class, that takes an Ellipsoid to associate as a reference body.
+     **/
     public OblateConic(Ellipsoid e) {
         this.e = e;
         this.drawingMethod = 0;
     }
 
+    /**
+     * This method sets the chosen method to draw the polygon on the surface of the Ellipsoid. 0: Uses
+     * a sensor with a define aperture on orbit. 1: Uses the required height over the horizon to obtain
+     * a polygon point through a bi-section method. 2: Uses the required height over the horizon to obtain
+     * a polygon point through a gradient descent method (original).
+     *
+     * @param drawingMethod the chosen method
+     **/
     public void setDrawingMethod(int drawingMethod) {
         this.drawingMethod = drawingMethod;
     }
 
     /**
-     * This method ...
+     * This method sets the elevation threshold parameter, the tolerance for its obtaining and the number
+     * of segments for the polygon drawn on the ellipsoid
      *
-     * @param epsilon elevation threshold (degrees)
+     * @param epsilon   elevation threshold (degrees)
      * @param tolerance tolerance when obtaining the half-angle from a given elevation threshold (degrees)
-     * @param segments the amount of segments for a half-cone of visibility
+     * @param segments  the amount of segments for a half-cone of visibility
      **/
     public void setElevationParams(double epsilon, double tolerance, int segments) {
         this.epsilon = epsilon;
@@ -43,17 +55,26 @@ public class OblateConic {
     }
 
     /**
-     * This method ...
+     * This method sets the orbiting sensor parameters and the number of segments for the
+     * resulting polygon on the surface of the ellipsoid
      *
      * @param halfApertureOfSensor the satellite's cone half-angle of visibility (degrees)
-     * @param segments the amount of segments for a half-cone of visibility
+     * @param segments             the amount of segments for a half-cone of visibility
      **/
     public void setSensorParams(double halfApertureOfSensor, int segments) {
         this.halfApertureOfSensor = halfApertureOfSensor;
         this.segments = segments;
     }
 
-    public List<double[]> drawLLAConic(double x, double y, double z) throws Exception {
+    /**
+     * This method draws a conic over the ellipsoid for a given x, y, z ECEF position in space, in Km.
+     *
+     * @param x the x position in Kilometers.
+     * @param y the y position in Kilometers.
+     * @param z the z position in Kilometers.
+     * @return a List of double[] containing the LLA coordinates.
+     **/
+    public List<double[]> drawLLAConic(double x, double y, double z) {
         List<double[]> coordinates = drawConic(x, y, z);
         return conv.ecef2lla(coordinates);
     }
