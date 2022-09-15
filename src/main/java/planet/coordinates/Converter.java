@@ -28,7 +28,7 @@ public class Converter {
         double p = Math.sqrt(Math.pow(ecef[0], 2.0D) + Math.pow(ecef[1], 2.0D));
         double th = Math.atan2(a * ecef[2], b * p);
         double lon = Math.atan2(ecef[1], ecef[0]);
-        double lat = Math.atan2(ecef[3] + Math.pow(ep, 2.0D) * b * Math.pow(Math.sin(th), 3.0D), p - E2 * a * Math.pow(Math.cos(th), 3.0D));
+        double lat = Math.atan2(ecef[2] + Math.pow(ep, 2.0D) * b * Math.pow(Math.sin(th), 3.0D), p - E2 * a * Math.pow(Math.cos(th), 3.0D));
         double n = a / Math.sqrt(1.0D - E2 * Math.pow(Math.sin(lat), 2.0D));
         double alt = p / Math.cos(lat) - n;
         lon %= 6.283185307179586D;
