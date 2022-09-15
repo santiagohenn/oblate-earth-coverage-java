@@ -56,9 +56,6 @@ public class HalfApertureVectors {
         double u_P1 = m_P1 * e_P1 - m_P1 * e_sc + u_sc;
         double u_P2 = m_P2 * e_P2 - m_P2 * e_sc + u_sc;
 
-        // Determination of epsilons
-        double[] epsilons = getEpsilons(e_P1, u_P1, e_P2, u_P2, m_P1, m_P2, a_tilde, b_tilde);
-
         coordinates.add(new double[]{e_P1, u_P1, 0});
         coordinates.add(new double[]{e_P2, u_P2, 0});
 
