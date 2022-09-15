@@ -1,8 +1,7 @@
 import org.junit.Test;
-import planet.ellipsoids.Ellipsoid;
-import planet.geometry.OblateConic;
+import body.ellipsoids.Ellipsoid;
+import body.geometry.OblateConic;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UsageTest {
@@ -30,7 +29,7 @@ public class UsageTest {
 
         try {
             // Obtain the list of lat,lon coordinates for a polygon on the ellipsoid, for a given x,y,z
-            // position in space, in KM
+            // position in space, in Kilometers
             List<double[]> coordinates = conic.drawConic(-990.945443, -5817.571039, 3334.217811);
         } catch (Exception exc) {
             exc.printStackTrace();

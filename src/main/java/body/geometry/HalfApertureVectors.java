@@ -1,10 +1,9 @@
-package planet.geometry;
+package body.geometry;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import static java.lang.Math.*;
 import static java.lang.Math.sqrt;
@@ -13,7 +12,7 @@ public class HalfApertureVectors {
 
 
     public static List<double[]> computeHalfAperture(double a_tilde, double b_tilde, double alpha_SC, double etaDeg,
-                                                      double eta_hor_1, double eta_hor_2, Vector3D r_line_local) throws Exception {
+                                                     double eta_hor_1, double eta_hor_2, Vector3D r_line_local) {
 
         List<double[]> coordinates = new ArrayList<>(2);
 
@@ -57,7 +56,7 @@ public class HalfApertureVectors {
         double u_P1 = m_P1 * e_P1 - m_P1 * e_sc + u_sc;
         double u_P2 = m_P2 * e_P2 - m_P2 * e_sc + u_sc;
 
-        //// Determination of epsilons
+        // Determination of epsilons
         double[] epsilons = getEpsilons(e_P1, u_P1, e_P2, u_P2, m_P1, m_P2, a_tilde, b_tilde);
 
         coordinates.add(new double[]{e_P1, u_P1, 0});
@@ -129,7 +128,7 @@ public class HalfApertureVectors {
         }
 
         if (wdt >= 1000) {
-            throw new TimeoutException("The algorithm was unable to converge to an eta for the given epsilon");
+            throw new Exception("The algorithm was unable to converge to an eta for the given epsilon");
         }
 
         coordinates.add(new double[]{e_P1, u_P1, 0});
@@ -141,7 +140,7 @@ public class HalfApertureVectors {
 
     public static List<double[]> computeWithElevationBisect(double a_tilde, double b_tilde, double alpha_SC,
                                                             double eta_hor_1, double eta_hor_2, double epsilon,
-                                                            double tol, Vector3D r_line_local) throws Exception {
+                                                            double tol, Vector3D r_line_local) {
 
         List<double[]> coordinates = new ArrayList<>(2);
 
@@ -225,7 +224,7 @@ public class HalfApertureVectors {
 
     }
 
-    private static double[] getEComponents(double alpha_SC, double alpha_P1, double alpha_P2, double a_tilde, double b_tilde, double e_sc, double u_sc) throws Exception {
+    private static double[] getEComponents(double alpha_SC, double alpha_P1, double alpha_P2, double a_tilde, double b_tilde, double e_sc, double u_sc) {
 
         //Slopes of the two secants
         double m_P1 = Math.tan(alpha_P1);
@@ -285,13 +284,12 @@ public class HalfApertureVectors {
             e_P2 = (-coeff2_2 + sqrt(Delta_P2)) / 2;
 
         } else {
-            throw new Exception("Not considered alpha_SC case");
+            throw new ArithmeticException("Not considered alpha_SC case");
         }
 
         return new double[]{e_P1, e_P2};
 
     }
-
 
 
     private static double[] getEpsilons(double e_P1, double u_P1, double e_P2, double u_P2, double m_P1, double m_P2, double a_tilde, double b_tilde) {

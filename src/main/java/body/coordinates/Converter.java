@@ -1,6 +1,6 @@
-package planet.coordinates;
+package body.coordinates;
 
-import planet.ellipsoids.Ellipsoid;
+import body.ellipsoids.Ellipsoid;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ public class Converter {
 
     private final Ellipsoid e;
 
-    public Converter(planet.ellipsoids.Ellipsoid e) {
+    public Converter(body.ellipsoids.Ellipsoid e) {
         this.e = e;
     }
 

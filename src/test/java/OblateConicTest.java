@@ -1,6 +1,6 @@
 import org.junit.Test;
-import planet.ellipsoids.Ellipsoid;
-import planet.geometry.OblateConic;
+import body.ellipsoids.Ellipsoid;
+import body.geometry.OblateConic;
 
 import java.util.ArrayList;
 import java.util.List;

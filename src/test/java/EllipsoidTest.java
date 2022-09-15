@@ -1,5 +1,5 @@
 import org.junit.Test;
-import planet.ellipsoids.Ellipsoid;
+import body.ellipsoids.Ellipsoid;
 import static org.junit.Assert.assertEquals;
 
 public class EllipsoidTest {

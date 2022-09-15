@@ -1,4 +1,4 @@
-package planet.ellipsoids;
+package body.ellipsoids;
 
 /**
  * This class holds the parameters of an ellipsoid

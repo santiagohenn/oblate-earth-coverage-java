@@ -1,7 +1,7 @@
-package planet.geometry;
+package body.geometry;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import planet.ellipsoids.Ellipsoid;
+import body.ellipsoids.Ellipsoid;
 
 public class AuxiliaryVectors {
 

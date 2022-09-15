@@ -1,8 +1,8 @@
-package planet.geometry;
+package body.geometry;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import planet.coordinates.Converter;
-import planet.ellipsoids.Ellipsoid;
+import body.coordinates.Converter;
+import body.ellipsoids.Ellipsoid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class OblateConic {
      * @param z the z component of the satellite's position (Km)
      * @return a List of double[] containing the polygons coordinates in degrees
      **/
-    public List<double[]> drawConic(double x, double y, double z) throws Exception {
+    public List<double[]> drawConic(double x, double y, double z) {
 
         Vector3D pos = new Vector3D(x, y, z);
 
@@ -130,29 +130,29 @@ public class OblateConic {
             // Ellipse's semi-minor axis
             double b_tilde = e.getB() * (sqrt(1 - (Math.pow(d, 2.0) / e.getA2()) - e.getE2() * Math.pow(n3_prime, 2))) / (1 - e.getE2() * Math.pow(n3_prime, 2.0));
 
-            Vector3D e;
-            Vector3D u;
+            Vector3D eV;
+            Vector3D uV;
 
             if (n1_prime == 0 && n2_prime == 0 && n3_prime == 1) {
                 // Ellipse 's semi-major axis direction in the Geocentric frame
-                e = new Vector3D(1, 0, 0);
+                eV = new Vector3D(1, 0, 0);
                 // Ellipse 's semi-major axis direction in the Geocentric frame
-                u = new Vector3D(0, 1, 0);
+                uV = new Vector3D(0, 1, 0);
             } else if (n1_prime == 0 && n2_prime == 0 && n3_prime == -1) {
                 // Ellipse 's semi-major axis direction in the Geocentric frame
-                e = new Vector3D(1, 0, 0);
+                eV = new Vector3D(1, 0, 0);
                 // Ellipse 's semi-major axis direction in the Geocentric frame
-                u = new Vector3D(0, -1, 0);
+                uV = new Vector3D(0, -1, 0);
             } else {
                 var arg = Math.pow(n1_prime, 2.0) + Math.pow(n2_prime, 2.0);
 
                 // Ellipse 's semi-major axis direction in the Geocentric frame
-                e = new Vector3D(n2_prime, -n1_prime, 0);
-                e = e.scalarMultiply(1 / sqrt(arg));
+                eV = new Vector3D(n2_prime, -n1_prime, 0);
+                eV = eV.scalarMultiply(1 / sqrt(arg));
 
                 // Ellipse 's semi-minor axis direction in the Geocentric frame
-                u = new Vector3D(-n1_prime * n3_prime, -n2_prime * n3_prime, arg);
-                u = u.scalarMultiply(-1.00 / sqrt(arg));
+                uV = new Vector3D(-n1_prime * n3_prime, -n2_prime * n3_prime, arg);
+                uV = uV.scalarMultiply(-1.00 / sqrt(arg));
 
             }
 
@@ -160,8 +160,8 @@ public class OblateConic {
             Vector3D r_line = pos.subtract(s);
 
             // Rotation matrix from Geocentric to the Local frame of the ellipse
-            double[][] aRot = {{e.getX(), e.getY(), e.getZ()},
-                    {u.getX(), u.getY(), u.getZ()},
+            double[][] aRot = {{eV.getX(), eV.getY(), eV.getZ()},
+                    {uV.getX(), uV.getY(), uV.getZ()},
                     {n_prime.getX(), n_prime.getY(), n_prime.getZ()}};
 
             // Position vector of the S/C w.r.to the ellipse centre aRot*r_line;
@@ -245,12 +245,16 @@ public class OblateConic {
             List<double[]> vectors = new ArrayList<>();
 
             // Compute the points in the local frame according to the chosen method
-            if (drawingMethod == 0) {    // Using eta
-                vectors = HalfApertureVectors.computeHalfAperture(a_tilde, b_tilde, alpha_SC, halfApertureOfSensor, eta_hor_1, eta_hor_2, r_line_local);
-            } else if (drawingMethod == 1) {     // Using th
-                vectors = HalfApertureVectors.computeWithElevationBisect(a_tilde, b_tilde, alpha_SC, eta_hor_1, eta_hor_2, epsilon, tolerance, r_line_local);
-            } else if (drawingMethod == 2) {
-                vectors = HalfApertureVectors.computeWithElevationGD(a_tilde, b_tilde, alpha_SC, eta_hor_1, eta_hor_2, epsilon, tolerance, r_line_local);
+            try {
+                if (drawingMethod == 0) {    // Using eta
+                    vectors = HalfApertureVectors.computeHalfAperture(a_tilde, b_tilde, alpha_SC, halfApertureOfSensor, eta_hor_1, eta_hor_2, r_line_local);
+                } else if (drawingMethod == 1) {     // Using th
+                    vectors = HalfApertureVectors.computeWithElevationBisect(a_tilde, b_tilde, alpha_SC, eta_hor_1, eta_hor_2, epsilon, tolerance, r_line_local);
+                } else if (drawingMethod == 2) {
+                    vectors = HalfApertureVectors.computeWithElevationGD(a_tilde, b_tilde, alpha_SC, eta_hor_1, eta_hor_2, epsilon, tolerance, r_line_local);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
             // Inverse transformation from local to Geocentric inertial frame
