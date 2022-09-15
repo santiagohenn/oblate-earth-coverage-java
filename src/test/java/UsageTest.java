@@ -27,13 +27,9 @@ public class UsageTest {
         // Segments: the amount of segments of the polygon drawn on the surface of the ellipsoid
         conic.setElevationParams(5, 1E-3, 50);
 
-        try {
-            // Obtain the list of lat,lon coordinates for a polygon on the ellipsoid, for a given x,y,z
-            // position in space, in Kilometers
-            List<double[]> coordinates = conic.drawConic(-990.945443, -5817.571039, 3334.217811);
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
+        // Obtain the list of lat,lon coordinates for a polygon on the ellipsoid, for a given x,y,z
+        // position in space, in Kilometers
+        List<double[]> coordinates = conic.drawConic(-990.945443, -5817.571039, 3334.217811);
 
     }
 
