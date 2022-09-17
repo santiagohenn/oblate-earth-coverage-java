@@ -1,30 +1,29 @@
 # oblate-body-coverage
-This is a JAVA port for the Nunges/Colombo Algorithm to find intersecting cones for a satellite's Field of View. The original MATLAB algorithm can be found [here](https://de.mathworks.com/matlabcentral/fileexchange/81848-coverage-area-determination-considering-an-oblate-earth) and the paper [here](https://doi.org/10.48550/arXiv.1906.12318). 
+This is a JAVA port for the Nunges/Colombo Algorithm to find intersecting cones for a satellite's Field of View. The original MATLAB algorithm can be found [here](https://de.mathworks.com/matlabcentral/fileexchange/81848-coverage-area-determination-considering-an-oblate-earth), and the paper [here](https://doi.org/10.48550/arXiv.1906.12318). 
 
 # Usage
 
-Define an ellipsoid (WGS84 in this example)
+*Define an ellipsoid (WGS84 in this example)*
 ```java
 Ellipsoid e = new Ellipsoid(6378.137, 1 / 298.257223563, 3.986004418E14, 7.2921150E-5);
 ```
 
-Define an OblateConic object associated with the ellipsoid e
+*Define an OblateConic object associated with the ellipsoid e*
 ```java
 OblateConic conic = new OblateConic(e);
 ```
 
-Set the conic drawing method:
+*Set the conic drawing method:*
 
 - 0: Sensor attached to the satellite
 - 1: Horizon elevation threshold - bi-section method
 - 2: Horizon elevation threshold - gradient descent method (original from the paper)
 
-Define an OblateConic object associated with the ellipsoid e
 ```java
 conic.setDrawingMethod(1);
 ```
 
-Set the parameters for drawing method 0.
+*Set the parameters for drawing method 0:*
 - HalfAperture: the sensor's conic half aperture in degrees
 - Segments: the amount of segments of the polygon drawn on the surface of the ellipsoid
      
@@ -32,7 +31,7 @@ Set the parameters for drawing method 0.
 conic.setSensorParams(65, 50);
 ```
 
-Set the parameters for drawing methods 1 and 2.
+*Set the parameters for drawing methods 1 and 2:*
 - Epsilon: elevation threshold over the horizon in degrees
 - Tolerance: the tolerance to find epsilon
 - Segments: the amount of segments of the polygon drawn on the surface of the ellipsoid
