@@ -214,8 +214,8 @@ public class HalfApertureVectors {
 
         }
 
-        coordinates.add(new double[]{e_P1, u_P1, 0});
-        coordinates.add(new double[]{e_P2, u_P2, 0});
+        coordinates.add(new double[]{e_P1, u_P1, eps1, eps2});
+        coordinates.add(new double[]{e_P2, u_P2, eps1, eps2});
 
         return coordinates;
 

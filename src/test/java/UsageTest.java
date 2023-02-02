@@ -7,7 +7,7 @@ import java.util.List;
 public class UsageTest {
 
     @Test
-    public void UsageExample() {
+    public void UsageExampleTest() {
 
         // Define an ellipsoid (WGS84 in this example)
         Ellipsoid e = new Ellipsoid(6378.137, 1 / 298.257223563, 3.986004418E14, 7.2921150E-5);
@@ -30,6 +30,27 @@ public class UsageTest {
         // Obtain the list of lat,lon coordinates for a polygon on the ellipsoid, for a given x,y,z
         // position in space, in Kilometers
         List<double[]> coordinates = conic.drawConic(-990.945443, -5817.571039, 3334.217811);
+
+    }
+
+    @Test
+    public void ConicDrawingMethodComparisonTest() {
+
+        // Define an ellipsoid (WGS84 in this example)
+        Ellipsoid e = new Ellipsoid(6378.137, 1 / 298.257223563, 3.986004418E14, 7.2921150E-5);
+        OblateConic conic = new OblateConic(e);
+
+        // Draw with bisection
+        conic.setDrawingMethod(1);
+        conic.setElevationParams(5, 1E-3, 4);
+        List<double[]> coordinates = conic.drawConic(-990.945443, -5817.571039, 3334.217811);
+        coordinates.forEach(c -> System.out.println(c[0] + "," + c[1]));
+
+        // Draw with original method
+        conic.setDrawingMethod(2);
+
+        coordinates = conic.drawConic(-990.945443, -5817.571039, 3334.217811);
+        coordinates.forEach(c -> System.out.println(c[0] + "," + c[1]));
 
     }
 

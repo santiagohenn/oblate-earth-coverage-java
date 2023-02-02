@@ -246,7 +246,7 @@ public class OblateConic {
 
             double lambda_hor = Math.acos(r_T1.dotProduct(r_T2) / (r_T1.getNorm() * r_T2.getNorm()));
 
-            // Angle between the S/C line-of-sight and the the semi-major axis direction e
+            // Angle between the S/C line-of-sight and the semi-major axis direction e
             double alpha_SC = Math.atan2(u_sc, e_sc);
 
             if (Math.abs(alpha_SC - PI / 2) < 10E-15) {
