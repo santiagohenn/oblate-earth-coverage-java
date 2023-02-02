@@ -1,0 +1,5 @@
+body\coordinates\Converter.class
+body\ellipsoids\Ellipsoid.class
+body\geometry\OblateConic.class
+body\geometry\HalfApertureVectors.class
+body\geometry\AuxiliaryVectors.class
