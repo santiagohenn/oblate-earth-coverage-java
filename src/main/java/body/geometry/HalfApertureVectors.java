@@ -83,10 +83,12 @@ public class HalfApertureVectors {
 
         double e_P1 = 0, e_P2 = 0, u_P1 = 0, u_P2 = 0;
         double alpha_P1 = 0, alpha_P2 = 0;
-        int wdt = -1;
+        double epsilon_1 = 0;
+        double epsilon_2 = 0;
+        int it = 0;
 
-        while ((err_1 > tol || err_2 > tol) && wdt < 1000) {
-            wdt++;
+        while ((err_1 > tol || err_2 > tol) && it < 1000) {
+            it++;
 
             // Angle of the secants w.r.to the semi-major axis direction
             alpha_P1 = (alpha_SC - eta_1);
@@ -106,8 +108,8 @@ public class HalfApertureVectors {
             double[] epsilons = getEpsilons(e_P1, u_P1, e_P2, u_P2, m_P1, m_P2, a_tilde, b_tilde);
 
             // Error update
-            double epsilon_1 = epsilons[0];
-            double epsilon_2 = epsilons[1];
+            epsilon_1 = epsilons[0];
+            epsilon_2 = epsilons[1];
 
             // Error update
             err_1 = epsilon - epsilon_1;
@@ -124,12 +126,12 @@ public class HalfApertureVectors {
 
         }
 
-        if (wdt >= 1000) {
+        if (it >= 1000) {
             throw new Exception("The algorithm was unable to converge to an eta for the given epsilon");
         }
 
-        coordinates.add(new double[]{e_P1, u_P1, 0});
-        coordinates.add(new double[]{e_P2, u_P2, 0});
+        coordinates.add(new double[]{e_P1, u_P1, 0, epsilon_1, epsilon_2, it});
+        coordinates.add(new double[]{e_P2, u_P2, 0, epsilon_1, epsilon_2, it});
 
         return coordinates;
 
@@ -214,8 +216,8 @@ public class HalfApertureVectors {
 
         }
 
-        coordinates.add(new double[]{e_P1, u_P1, eps1, eps2});
-        coordinates.add(new double[]{e_P2, u_P2, eps1, eps2});
+        coordinates.add(new double[]{e_P1, u_P1, 0, eps1, eps2, it});
+        coordinates.add(new double[]{e_P2, u_P2, 0, eps1, eps2, it});
 
         return coordinates;
 

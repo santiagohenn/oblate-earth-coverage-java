@@ -294,8 +294,8 @@ public class OblateConic {
             P1_3D.add(s);
             P2_3D.add(s);
 
-            coordinates1.add(new double[]{P1_3D.getX(), P1_3D.getY(), P1_3D.getZ()});
-            coordinates2.add(new double[]{P2_3D.getX(), P2_3D.getY(), P2_3D.getZ()});
+            coordinates1.add(new double[]{P1_3D.getX(), P1_3D.getY(), P1_3D.getZ(), P1[3], P1[4], P1[5]});
+            coordinates2.add(new double[]{P2_3D.getX(), P2_3D.getY(), P2_3D.getZ(), P2[3], P2[4], P2[5]});
 
         }
 

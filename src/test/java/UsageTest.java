@@ -41,16 +41,17 @@ public class UsageTest {
         OblateConic conic = new OblateConic(e);
 
         // Draw with bisection
+        System.out.println("Bisection");
         conic.setDrawingMethod(1);
         conic.setElevationParams(5, 1E-3, 4);
         List<double[]> coordinates = conic.drawConic(-990.945443, -5817.571039, 3334.217811);
-        coordinates.forEach(c -> System.out.println(c[0] + "," + c[1]));
+        coordinates.forEach(c -> System.out.println(c[0] + "," + c[1] + "," + c[2] + "," + c[4] + "," + c[5]));
 
         // Draw with original method
+        System.out.println("Original");
         conic.setDrawingMethod(2);
-
         coordinates = conic.drawConic(-990.945443, -5817.571039, 3334.217811);
-        coordinates.forEach(c -> System.out.println(c[0] + "," + c[1]));
+        coordinates.forEach(c -> System.out.println(c[0] + "," + c[1] + "," + c[2] + "," + c[4] + "," + c[5]));
 
     }
 
